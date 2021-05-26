@@ -30,7 +30,11 @@
                 </div>
                 <ul class="list-unstyled">
                     {% for payment in object.received_payments.all %}
-                    <li>{{payment.from_account.account_id_identicon_link}} {{payment.amount}}</li>
+                    <li>
+                        {{payment.from_account.account_id_identicon_link}}
+                        {% if payment.memo != "" %}[{{ payment.memo }}]{% endif %}
+                        {{payment.amount}}
+                    </li>
                     {% endfor %}
                 </ul>
             </div>
@@ -40,7 +44,11 @@
                 </div>
                 <ul class="list-unstyled">
                     {% for payment in object.issued_payments.all %}
-                    <li>{{payment.to_account.account_id_identicon_link}} {{payment.amount}}</li>
+                    <li>
+                        {{payment.to_account.account_id_identicon_link}}
+                        {% if payment.memo != "" %}[{{ payment.memo }}]{% endif %}
+                        {{payment.amount}}
+                    </li>
                     {% endfor %}
                 </ul>
             </div>
