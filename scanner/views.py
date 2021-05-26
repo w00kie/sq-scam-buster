@@ -15,7 +15,15 @@ def graph_data(request):
     G = nx.Graph()
 
     for account in StellarAccount.objects.all():
-        G.add_node(account.public_key, has_sq_badges=account.has_sq_badges)
+        if account.has_sq_badges:
+            group = "quester"
+        elif account.directory_tags:
+            group = account.directory_tags[0]
+        elif account.suspect:
+            group = "suspect"
+        else:
+            group = "unknown"
+        G.add_node(account.public_key, group=group)
     for payment in Payment.objects.all():
         G.add_edge(payment.from_account.public_key, payment.to_account.public_key)
     graph_data = json_graph.node_link_data(G)

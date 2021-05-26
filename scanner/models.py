@@ -18,7 +18,10 @@ class StellarAccount(models.Model):
     directory_tags = models.JSONField(default=list)
 
     def __str__(self) -> str:
-        return shorten(self.public_key)
+        if self.directory_name:
+            return f"[{self.directory_name}] {shorten(self.public_key)}"
+        else:
+            return shorten(self.public_key)
 
     @admin.display(description="Account ID")
     def account_id_identicon(self):

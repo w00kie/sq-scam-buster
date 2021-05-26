@@ -4,6 +4,8 @@ var height = +svg.attr("height");
 
 svg.attr("viewBox", [-width / 2, -height / 2, width, height]);
 
+var g = svg.append("g");
+
 var color = d3.scaleOrdinal(d3.schemeCategory10);
 
 var simulation = d3
@@ -21,7 +23,7 @@ var simulation = d3
 d3.json("graph", function (error, graph) {
   if (error) throw error;
 
-  var link = svg
+  var link = g
     .append("g")
     .attr("class", "links")
     .selectAll("line")
@@ -29,7 +31,7 @@ d3.json("graph", function (error, graph) {
     .enter()
     .append("line");
 
-  var node = svg
+  var node = g
     .append("g")
     .attr("class", "nodes")
     .selectAll("circle")
@@ -38,7 +40,7 @@ d3.json("graph", function (error, graph) {
     .append("circle")
     .attr("r", 5)
     .attr("fill", function (d) {
-      return color(d.has_sq_badges);
+      return color(d.group);
     })
     .on("dblclick", function (d) {
       window.open("/account/" + d.id, "_blank");
@@ -50,6 +52,8 @@ d3.json("graph", function (error, graph) {
         .on("drag", dragged)
         .on("end", dragended)
     );
+
+  svg.call(d3.zoom().on("zoom", zoomed));
 
   node.append("title").text(function (d) {
     return d.id;
@@ -83,6 +87,20 @@ d3.json("graph", function (error, graph) {
       });
   }
 });
+
+function zoomed() {
+  let e = d3.event;
+
+  if (e.transform.k > 2 && lastK != e.transform.k) {
+    lastK = e.transform.k;
+    console.log("zoomed");
+    zoomLvl = Math.log2(e.transform.k);
+    globalNode.attr("stroke-width", 1.5 / zoomLvl);
+    link.attr("stroke-width", (d) => Math.sqrt(d.value) / zoomLvl);
+  }
+
+  g.attr("transform", e.transform);
+}
 
 function dragstarted(d) {
   if (!d3.event.active) simulation.alphaTarget(0.3).restart();
