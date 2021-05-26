@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import environ
+import django_heroku
 
 env = environ.Env()
 environ.Env.read_env()
@@ -146,3 +147,5 @@ HORIZON_ENDPOINTS = [
     "https://horizon.stellar.lobstr.co",
     # "https://stellar-horizon.satoshipay.io",
 ]
+
+django_heroku.settings(locals())
