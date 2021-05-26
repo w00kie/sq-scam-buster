@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% load static %}
+
+{% block title %}Stellar Quest Scammer Buster - {{ object }}{% endblock %}
+
+{% block bootstrap5_extra_head %}
+<link rel="stylesheet" href="{% static 'style.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="my-5 px-3 py-3 text-center">
+        <h1 class="display-5">{{ object.account_id_identicon_link }}</h1>
+        <p class="lead">{{ object.sorted_badges|join:" | "}}</p>
+    </div>
+    <div class="container-sm">
+        <div class="row justify-content-md-center">
+            <div class="col col-lg-4">
+                <div class="text-center">
+                    <h2>Payments In</h2>
+                </div>
+                <ul class="list-unstyled">
+                    {% for payment in object.received_payments.all %}
+                    <li>{{payment.from_account.account_id_identicon_link}} {{payment.amount}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col col-lg-4">
+                <div class="text-center">
+                <h2>Payments Out</h2>
+                </div>
+                <ul class="list-unstyled">
+                    {% for payment in object.issued_payments.all %}
+                    <li>{{payment.to_account.account_id_identicon_link}} {{payment.amount}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}

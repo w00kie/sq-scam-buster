@@ -1,0 +1,13 @@
+django
+black
+flake8
+django-environ
+stellar-sdk
+requests
+celery[redis]
+django-celery-results
+django-sslserver
+tdqm
+maya
+django-bootstrap-v5
+networkx
