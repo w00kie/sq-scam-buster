@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from django.views.generic import DetailView
+from django.views.generic.edit import UpdateView
 import networkx as nx
 from networkx.readwrite import json_graph
 
@@ -31,6 +31,7 @@ def graph_data(request):
     return JsonResponse(graph_data)
 
 
-class StellarAccountDetailView(DetailView):
+class StellarAccountDetailView(UpdateView):
     model = StellarAccount
+    fields = ["suspect", "notes"]
     template_name = "scanner/account.html"

@@ -14,3 +14,7 @@
   height: 1em;
   margin: 0 0.1em;
 }
+
+textarea {
+  height: 6em;
+}

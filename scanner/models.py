@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib import admin
 from django.utils.html import format_html
+from django.urls import reverse
 
 
 def shorten(public_key: str) -> str:
@@ -44,6 +45,9 @@ class StellarAccount(models.Model):
 
     def sorted_badges(self):
         return sorted(self.badges)
+
+    def get_absolute_url(self):
+        return reverse("account", kwargs={"pk": self.pk})
 
 
 class Payment(models.Model):

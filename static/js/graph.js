@@ -56,7 +56,7 @@ d3.json("graph", function (error, graph) {
   svg.call(d3.zoom().on("zoom", zoomed));
 
   node.append("title").text(function (d) {
-    return d.id;
+    return d.id + " - " + d.group;
   });
 
   simulation.nodes(graph.nodes).on("tick", ticked);
