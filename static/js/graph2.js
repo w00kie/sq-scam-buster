@@ -21,9 +21,9 @@ var simulation = d3
     })
   )
   .force("charge", d3.forceManyBody())
-  .force("center", d3.forceCenter(width / 2, height / 2))
   .force("x", d3.forceX())
-  .force("y", d3.forceY());
+  .force("y", d3.forceY())
+  .force("center", d3.forceCenter(width / 2, height / 2));
 
 d3.json("graph", function (error, graph) {
   if (error) throw error;
