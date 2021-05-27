@@ -28,10 +28,10 @@ class Command(BaseCommand):
                 account.directory_name = data.get("name", "")
                 account.directory_tags = data.get("tags", [])
                 account.save()
-                progress_bar.update(1)
                 sleep(1)
             except requests.exceptions.HTTPError:
-                continue
+                pass
             except Exception as e:
                 tqdm.write(self.style.ERROR(f"Hit an error: {e}"))
-                continue
+                pass
+            progress_bar.update(1)
