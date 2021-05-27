@@ -19,12 +19,12 @@ def graph_data(request):
         num_issued=Count("issued_payments"),
         num_received=Count("received_payments"),
     ).filter(Q(num_issued__gt=0) | Q(num_received__gt=0)):
-        if account.has_sq_badges:
+        if account.suspect:
+            group = "suspect"
+        elif account.has_sq_badges:
             group = "quester"
         elif account.directory_tags:
             group = account.directory_tags[0]
-        elif account.suspect:
-            group = "suspect"
         else:
             group = "unknown"
         G.add_node(account.public_key, group=group)
