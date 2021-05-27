@@ -12,17 +12,19 @@
     <div class="my-5 px-3 py-3 text-center">
         <h1 class="display-5">{{ object.account_id_identicon_link }}</h1>
         <p class="lead">{{ object.sorted_badges|join:" | "}}</p>
-        {% if object.directory_name == "" %}
         <form method="post">
             <div class="row justify-content-md-center">
                 {% csrf_token %}
-                {% bootstrap_form form layout='inline' %}
+                {% if object.directory_name == "" %}
+                    {% bootstrap_form form layout="inline" %}
+                {% else %}
+                    {% bootstrap_form form layout="inline" exclude="suspect" %}
+                {% endif %}
                 <div class="col-auto">
                     {% bootstrap_button "Save" button_type="submit" button_class="btn-primary" %}
                 </div>
             </div>
         </form>
-        {% endif %}
     </div>
     <div class="container-sm">
         <div class="row justify-content-md-center">
