@@ -48,4 +48,6 @@ def suspects(request):
         for received_payments in account.received_payments.all():
             output["records"].append(received_payments.from_account.public_key)
 
+    output["count"] = len(output["records"])
+
     return JsonResponse(output)
