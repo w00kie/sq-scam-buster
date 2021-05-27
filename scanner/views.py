@@ -27,7 +27,7 @@ def graph_data(request):
             group = account.directory_tags[0]
         else:
             group = "unknown"
-        G.add_node(account.public_key, group=group)
+        G.add_node(account.public_key, group=group, name=str(account))
     for payment in Payment.objects.all():
         G.add_edge(payment.from_account.public_key, payment.to_account.public_key)
     graph_data = json_graph.node_link_data(G)

@@ -63,7 +63,7 @@ d3.json("graph", function (error, graph) {
     );
 
   node.append("title").text(function (d) {
-    return d.id + " - " + d.group;
+    return d.name + " - " + d.group;
   });
 
   simulation.nodes(graph.nodes).on("tick", ticked);
