@@ -42,12 +42,13 @@ class StellarAccountDetailView(UpdateView):
 
 
 def suspects(request):
-    output = {"records": []}
+    suspect_accounts = set()
     for account in StellarAccount.objects.filter(suspect=True):
-        output["records"].append(account.public_key)
+        suspect_accounts.add(account.public_key)
         for received_payments in account.received_payments.all():
-            output["records"].append(received_payments.from_account.public_key)
+            suspect_accounts.add(received_payments.from_account.public_key)
 
-    output["count"] = len(output["records"])
+    output = {"records": list(suspect_accounts)}
+    output["count"] = len(len(suspect_accounts))
 
     return JsonResponse(output)
