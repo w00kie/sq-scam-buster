@@ -39,3 +39,13 @@ class StellarAccountDetailView(UpdateView):
     model = StellarAccount
     fields = ["suspect", "notes"]
     template_name = "scanner/account.html"
+
+
+def suspects(request):
+    output = {"records": []}
+    for account in StellarAccount.objects.filter(suspect=True):
+        output["records"].append(account.public_key)
+        for received_payments in account.received_payments.all():
+            output["records"].append(received_payments.from_account.public_key)
+
+    return JsonResponse(output)
