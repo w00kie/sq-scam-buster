@@ -15,7 +15,7 @@ class Command(BaseCommand):
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
         big_payees = StellarAccount.objects.annotate(num_received=Count("received_payments")).filter(
-            num_received__gte=3
+            num_received__gte=10
         )
 
         progress_bar = tqdm(desc="Processing", total=big_payees.count())
