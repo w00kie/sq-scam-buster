@@ -24,11 +24,14 @@ class Command(BaseCommand):
             try:
                 resp = requests.get(f"https://api.stellar.expert/explorer/directory/{account.public_key}")
                 resp.raise_for_status()
+                data = resp.json()
+                account.directory_name = data.get("name", "")
+                account.directory_tags = data.get("tags", [])
+                account.save()
+                progress_bar.update(1)
+                sleep(1)
             except requests.exceptions.HTTPError:
                 continue
-            data = resp.json()
-            account.directory_name = data.get("name", "")
-            account.directory_tags = data.get("tags", [])
-            account.save()
-            progress_bar.update(1)
-            sleep(1)
+            except Exception as e:
+                tqdm.write(self.style.ERROR(f"Hit an error: {e}"))
+                continue
