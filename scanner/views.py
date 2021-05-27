@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.generic.edit import UpdateView
+from django.db.models import Count, Q
 import networkx as nx
 from networkx.readwrite import json_graph
 
@@ -14,7 +15,10 @@ def home(request):
 def graph_data(request):
     G = nx.Graph()
 
-    for account in StellarAccount.objects.all():
+    for account in StellarAccount.objects.annotate(
+        num_issued=Count("issued_payments"),
+        num_received=Count("received_payments"),
+    ).filter(Q(num_issued__gt=0) | Q(num_received__gt=0)):
         if account.has_sq_badges:
             group = "quester"
         elif account.directory_tags:
