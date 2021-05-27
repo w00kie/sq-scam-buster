@@ -149,4 +149,6 @@ HORIZON_ENDPOINTS = [
     # "https://stellar-horizon.satoshipay.io",
 ]
 
-django_heroku.settings(locals())
+HEROKU = env.bool("HEROKU", True)
+if HEROKU:
+    django_heroku.settings(locals())
