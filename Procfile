@@ -1,1 +1,1 @@
-web: gunicorn sqscambuster.wsgi
+web: gunicorn -t 60 sqscambuster.wsgi
