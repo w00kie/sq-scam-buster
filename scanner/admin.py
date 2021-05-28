@@ -5,9 +5,17 @@ from .models import StellarAccount, Payment, Badge
 
 @admin.register(StellarAccount)
 class StellarAccountAdmin(admin.ModelAdmin):
-    list_display = ["account_id_identicon", "has_sq_badges", "badges", "nickname", "directory_tags", "suspect"]
+    list_display = [
+        "account_id_identicon",
+        "has_sq_badges",
+        "badges",
+        "nickname",
+        "directory_tags",
+        "suspect",
+        "kosher",
+    ]
     search_fields = ["public_key"]
-    list_filter = ("suspect", "has_sq_badges")
+    list_filter = ("suspect", "kosher", "has_sq_badges")
 
     class Media:
         css = {"all": ("admin/custom.css",)}
