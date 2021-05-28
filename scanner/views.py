@@ -19,15 +19,7 @@ def graph_data(request):
         num_issued=Count("issued_payments"),
         num_received=Count("received_payments"),
     ).filter(Q(num_issued__gt=0) | Q(num_received__gt=0)):
-        if account.suspect:
-            group = "suspect"
-        elif account.has_sq_badges:
-            group = "quester"
-        elif account.directory_tags:
-            group = account.directory_tags[0]
-        else:
-            group = "unknown"
-        G.add_node(account.public_key, group=group, name=str(account))
+        G.add_node(account.public_key, group=account.get_group(), name=str(account))
     for payment in Payment.objects.all():
         G.add_edge(payment.from_account.public_key, payment.to_account.public_key)
     graph_data = json_graph.node_link_data(G)
@@ -37,7 +29,7 @@ def graph_data(request):
 
 class StellarAccountDetailView(UpdateView):
     model = StellarAccount
-    fields = ["suspect", "notes"]
+    fields = ["suspect", "kosher", "notes"]
     template_name = "scanner/account.html"
 
 
@@ -45,8 +37,10 @@ def suspects(request):
     suspect_accounts = set()
     for account in StellarAccount.objects.filter(suspect=True):
         suspect_accounts.add(account.public_key)
-        for received_payments in account.received_payments.all():
-            suspect_accounts.add(received_payments.from_account.public_key)
+        for payment in account.received_payments.all():
+            mule = payment.from_account
+            if not mule.kosher:
+                suspect_accounts.add(mule.public_key)
 
     output = {"records": list(suspect_accounts)}
     output["count"] = len(suspect_accounts)

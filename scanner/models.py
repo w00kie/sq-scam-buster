@@ -13,6 +13,7 @@ class StellarAccount(models.Model):
     has_sq_badges = models.BooleanField(default=False)
     badges = models.JSONField(default=list)
     suspect = models.BooleanField(default=False)
+    kosher = models.BooleanField(default=False)
     notes = models.TextField(blank=True)
     nickname = models.CharField(max_length=64, blank=True)
     directory_name = models.CharField(max_length=64, blank=True)
@@ -48,6 +49,19 @@ class StellarAccount(models.Model):
 
     def get_absolute_url(self):
         return reverse("account", kwargs={"pk": self.pk})
+
+    def get_group(self) -> str:
+        if self.kosher:
+            group = "kosher"
+        elif self.suspect:
+            group = "suspect"
+        elif self.has_sq_badges:
+            group = "quester"
+        elif self.directory_tags:
+            group = self.directory_tags[0]
+        else:
+            group = "unknown"
+        return group
 
 
 class Payment(models.Model):
