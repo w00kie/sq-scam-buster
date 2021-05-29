@@ -11,13 +11,13 @@ def shorten(public_key: str) -> str:
 class StellarAccount(models.Model):
     public_key = models.CharField(primary_key=True, max_length=56)
     has_sq_badges = models.BooleanField(default=False)
-    badges = models.JSONField(default=list)
+    badges = models.JSONField(default=list, blank=True)
     suspect = models.BooleanField(default=False)
     kosher = models.BooleanField(default=False)
     notes = models.TextField(blank=True)
     nickname = models.CharField(max_length=64, blank=True)
     directory_name = models.CharField(max_length=64, blank=True)
-    directory_tags = models.JSONField(default=list)
+    directory_tags = models.JSONField(default=list, blank=True)
 
     def __str__(self) -> str:
         if self.directory_name:
